@@ -5,4 +5,7 @@ spring:
       database: MyAgent
       auto-index-creation: true
 
-
+#
+#springdoc:
+#  swagger-ui:
+#    disable-swagger-default-url: true
