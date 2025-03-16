@@ -32,17 +32,16 @@ public class ImageExtractionAPI {
         this.webClient = webClientBuilder.build();
     }
 
-    public String extractText(MultipartFile file) throws IOException {
+    public String extractText(byte[] file) throws IOException {
 
-        if(!file.isEmpty()) {
-            byte[] imageBytes = file.getBytes();
+        if(file.length != 0) {
             String authHeader = "Basic " + Base64.getEncoder().encodeToString((USERNAME + ":" + LICENCE_CODE).getBytes());
 
             String response = webClient.post()
                     .uri(OCR_MAIN_URL)
                     .header("Authorization", authHeader)
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .bodyValue(imageBytes)
+                    .bodyValue(file)
                     .retrieve()
                     .bodyToMono(String.class)
                     .onErrorResume(WebClientResponseException.class, ex -> Mono.just("Error: " + ex.getResponseBodyAsString()))

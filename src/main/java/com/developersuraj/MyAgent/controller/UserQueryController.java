@@ -14,10 +14,10 @@ public class UserQueryController {
     @Autowired
     private AgentManager agentManager; // Now calling the new multi-agent orchestrator
 
-    @PostMapping("/ask/{userName}")
-    public String getAiResponse(@PathVariable String userName, @RequestBody String query) {
+    @PostMapping("/ask")
+    public String getAiResponse(@RequestBody String query) {
         try {
-            return agentManager.processQuery(query, userName);
+            return agentManager.processQuery(query);
         } catch (Exception e) {
             log.error("Error: " + e.getMessage());
             return "An error occurred while processing your query.";
