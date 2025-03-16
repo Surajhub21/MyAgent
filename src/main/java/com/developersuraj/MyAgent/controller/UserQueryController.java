@@ -5,6 +5,8 @@ import com.developersuraj.MyAgent.services.AgentManager;
 import com.developersuraj.MyAgent.services.externalsource.ImageExtractionAPI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +27,7 @@ public class UserQueryController {
     private ImageExtractionAPI textExtractService;
 
     @PostMapping("/ask")
-    public String getAiResponse(@RequestBody BodyModel bodyModel) {
+    public ResponseEntity<String> getAiResponse(@RequestBody BodyModel bodyModel) {
 
         try {
 
@@ -35,7 +37,7 @@ public class UserQueryController {
                 String text = textExtractService.extractText(imageBytes);
 
                 String mainQuery = text + "\n" + bodyModel.getQuery();
-                return agentManager.processQuery(mainQuery);
+                return new ResponseEntity<>(agentManager.processQuery(mainQuery), HttpStatus.OK);
 
             }
             else if (bodyModel.getImage() != null) {
@@ -43,24 +45,24 @@ public class UserQueryController {
                 byte[] imageBytes = downloadImage(bodyModel.getImage());
                 String text = textExtractService.extractText(imageBytes);
 
-                return agentManager.processQuery(text);
+                return new ResponseEntity<>(agentManager.processQuery(text), HttpStatus.OK);
 
             }
             else if (bodyModel.getQuery() != null) {
 
-                return agentManager.processQuery(bodyModel.getQuery());
+                return new ResponseEntity<>(agentManager.processQuery(bodyModel.getQuery()), HttpStatus.OK);
 
             }
             else {
 
-                return "Give proper Information.";
+                return new ResponseEntity<>("Nothing!", HttpStatus.NO_CONTENT);
 
             }
 
 
         } catch (Exception e) {
             log.error("Error: " + e.getMessage());
-            return "An error occurred while processing your query.";
+            return new ResponseEntity<>("An error occurred while processing your query.", HttpStatus.BAD_REQUEST);
         }
 
     }
