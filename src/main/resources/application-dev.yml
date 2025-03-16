@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://sm1surajmondal:i6NQ1gCX6ONkKrMn@cluster0.quadp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: MyAgent
+      auto-index-creation: true
+
+
