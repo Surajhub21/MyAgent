@@ -2,6 +2,7 @@ package com.developersuraj.MyAgent.services.externalsource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.Base64;
 
 @Service
+@Slf4j
 public class ImageExtractionAPI {
 
     @Value("${OCR_USERNAME}")
@@ -64,6 +66,7 @@ public class ImageExtractionAPI {
                 return ocrTextNode.get(0).get(0).asText();
             }
         } catch (Exception e) {
+            log.error("Error for this data " + jsonResponse + "\n"+ e);
             return "Failed to parse OCR text";
         }
         return "No text found";
